@@ -1,6 +1,6 @@
 package fokka.se.Todo;
 
-public class Person {
+public class Person  {
 
     private int id;
     private String firstName;

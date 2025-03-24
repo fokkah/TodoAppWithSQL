@@ -6,15 +6,18 @@ import java.sql.SQLException;
 
 public class SQLconnection {
 
-        Connection connection;
+        private static String url = "jdbc:mysql://localhost:3306/todoit";
+        private static String user = "root";
+        private static String password = "admin";
 
-    {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/todoit", "fokka", "admin");
 
-        } catch (SQLException e) {
-            System.out.println("Error while connecting to server");
-        }
-    }
+          public static Connection getConnection() throws SQLException {
+              Connection connection = null;
+              connection = DriverManager.getConnection(url, user, password);
+
+              return connection;
+          }
+        //
+
 
 }
