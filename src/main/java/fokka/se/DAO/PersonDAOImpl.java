@@ -4,10 +4,7 @@ import fokka.se.DB.SQLconnection;
 import fokka.se.Interface.People;
 import fokka.se.Todo.Person;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class PersonDAOImpl implements People {
@@ -30,10 +27,23 @@ public class PersonDAOImpl implements People {
     }
 
     @Override
-    public ArrayList<Person> findAll() {
-        return null;
-    }
+    public ArrayList<Person> findAll() throws SQLException {
 
+        Connection connection = SQLconnection.getConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT person_id, first_name, last_name";
+        ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()){
+                int id = rs.getInt("person_id");
+                String firstName = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+
+                System.out.println("ID: " + id + " Name: " + firstName + " " + last_name );
+            }
+        return null;
+
+    }
 
     @Override
     public Person findById(int id) throws SQLException {

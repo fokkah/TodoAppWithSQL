@@ -15,11 +15,13 @@ public class Main {
 //        Person person = new Person(1, "Tamas", "Szalai");
 //        System.out.println(person);
 
-        Connection connection = SQLconnection.getConnection();
+//       Connection connection = SQLconnection.getConnection();
+//
+//       if (connection != null){
+//           System.out.println("Database connection established");
+//       }
 
-       if (connection != null){
-           System.out.println("Database connection established");
-       }
+
 
 
     }
