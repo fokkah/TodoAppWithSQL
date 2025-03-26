@@ -9,39 +9,75 @@ import java.util.ArrayList;
 
 public class PersonDAOImpl implements People {
 
+    private final Connection connection;
+
+    public PersonDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public Person create(Person person) throws SQLException {
-        Connection connection = SQLconnection.getConnection();
-        String sql = "INSERT INTO person (person_id, first_name, last_name)";
+        String sql = "INSERT INTO person (first_name, last_name) VALUES (?, ?)";
+        try (
 
-        PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ){
+            //connection.setAutoCommit(false);
+            //Auto commit kollar ifall alla las till rätt innan den lägger till i DB. Måste köra connection.commit efter allt är executat.
 
-        ps.setInt(1, person.getId());
-        ps.setString(2, person.getFirstName());
-        ps.setString(3, person.getLastName());
+            ps.setString(1, person.getFirstName());
+            ps.setString(2, person.getLastName());
 
-        int result = ps.executeUpdate();
+            int result = ps.executeUpdate();
+            //connection.commit();
+                if (result > 0){
+                    System.out.println("Done");
+                    ResultSet rs =  ps.getGeneratedKeys();
+                    if(rs.next()){
+                        int id = rs.getInt(1);
+                        person.setId(id);
+                    }
+                }
 
+        } catch (Exception e) {
+            System.out.println("There was a problem creating the object" + e.getMessage());
+            e.printStackTrace();
+        }
         return person ;
     }
 
     @Override
     public ArrayList<Person> findAll() throws SQLException {
 
-        Connection connection = SQLconnection.getConnection();
-        Statement statement = connection.createStatement();
+        ArrayList<Person> personArrayList = new ArrayList<>();
 
-        String sql = "SELECT person_id, first_name, last_name";
-        ResultSet rs = statement.executeQuery(sql);
+        String sql = "SELECT * from person";
+        try (
+                Statement createstatement = connection.createStatement();
+                ResultSet rs = createstatement.executeQuery(sql)
+            ){
+
             while (rs.next()){
                 int id = rs.getInt("person_id");
                 String firstName = rs.getString("first_name");
                 String last_name = rs.getString("last_name");
 
-                System.out.println("ID: " + id + " Name: " + firstName + " " + last_name );
+
+                personArrayList.add(new Person(id, firstName, last_name));
+
+//                personArrayList.add(new Person(
+//                        rs.getInt("person_id"),
+//                        rs.getString("first_name"),
+//                        rs.getString("last_name") ));
+
             }
-        return null;
+
+        }catch (Exception e){
+            System.out.println("Couldnt retrieve data" + e.getMessage());
+            e.printStackTrace();
+        }
+        return personArrayList ;
+
 
     }
 

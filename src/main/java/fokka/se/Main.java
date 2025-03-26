@@ -12,10 +12,24 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-//        Person person = new Person(1, "Tamas", "Szalai");
+        try (
+
+            Connection connection = SQLconnection.getConnection();
+        ){
+        Person person = new Person(1, "Tamas", "Szalai");
+        PersonDAOImpl newPersonDAO = new PersonDAOImpl(connection);
+
+        //newPersonDAO.create(person);
+        newPersonDAO.findAll().forEach(System.out::println);
+
+
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
 //        System.out.println(person);
 
-//       Connection connection = SQLconnection.getConnection();
 //
 //       if (connection != null){
 //           System.out.println("Database connection established");
@@ -25,4 +39,5 @@ public class Main {
 
 
     }
+
 }
