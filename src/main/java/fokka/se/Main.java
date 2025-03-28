@@ -16,15 +16,17 @@ public class Main {
             Connection connection = SQLconnection.getConnection();
 
         ){
-        Person person = new Person("Tamas", "Szalai");
+        Person person = new Person("test1FirstName", "test1LastName");
         PersonDAOImpl newPersonDAO = new PersonDAOImpl(connection);
+        //newPersonDAO.create(person1);
+        person.setFirstName("testFor");
+        person.setLastName("update");
 
-        //newPersonDAO.create(person);
+        newPersonDAO.update(person);
+            System.out.println("Update done" + person);
         //newPersonDAO.findAll().forEach(System.out::println);
         //System.out.println(newPersonDAO.findById(2));
-            System.out.println(newPersonDAO.findByName("Tamas"));
-
-
+            // newPersonDAO.findByName("Tamas").forEach(System.out::println);
         }catch (SQLException e){
             System.out.println(e.getMessage());
             e.printStackTrace();
