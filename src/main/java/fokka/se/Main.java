@@ -21,8 +21,8 @@ public class Main {
 
         //newPersonDAO.create(person);
         //newPersonDAO.findAll().forEach(System.out::println);
-
-        System.out.println(newPersonDAO.findById(2));
+        //System.out.println(newPersonDAO.findById(2));
+            System.out.println(newPersonDAO.findByName("Tamas"));
 
 
         }catch (SQLException e){

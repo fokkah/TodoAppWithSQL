@@ -110,8 +110,42 @@ public class PersonDAOImpl implements People {
 
     @Override
     public ArrayList<Person> findByName(String person) {
-        return null;
+        ArrayList<Person> findByNameArrayList = new ArrayList<>();
+
+        String sql = "SELECT person_id, first_name, last_name FROM person where first_name =? OR last_name = ?";
+        //String sqlLN = "SELECT * FROM person where last_name = ?";
+        //String sqlName = sqlFN + sqlLN;
+
+        try (
+
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ){
+            ps.setString(1, person);
+            ps.setString(2, person);
+            try(
+                    ResultSet rs = ps.executeQuery()
+            ){
+                while (rs.next()){
+                    int id = rs.getInt("person_id");
+                    String firsName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    //if (person.equals(sqlFN) || person.equals(sqlLN)) {}
+
+                    findByNameArrayList.add(new Person(id,firsName,lastName));
+
+                    return findByNameArrayList;
+                }
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());}
+        throw new IndexOutOfBoundsException("No such Name exists");
     }
+
+
+
+
+
+
 
     @Override
     public Person update(Person person) {
