@@ -1,6 +1,5 @@
 package fokka.se.DAO;
 
-import fokka.se.DB.SQLconnection;
 import fokka.se.Interface.People;
 import fokka.se.Todo.Person;
 
@@ -20,8 +19,8 @@ public class PersonDAOImpl implements People {
         String sql = "INSERT INTO person (first_name, last_name) VALUES (?, ?)";
         try (
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ){
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
             //connection.setAutoCommit(false);
             //Auto commit kollar ifall alla las till rätt innan den lägger till i DB. Måste köra connection.commit efter allt är executat.
 
@@ -30,20 +29,20 @@ public class PersonDAOImpl implements People {
 
             int result = ps.executeUpdate();
             //connection.commit();
-                if (result > 0){
-                    System.out.println("Done");
-                    ResultSet rs =  ps.getGeneratedKeys();
-                    if(rs.next()){
-                        int id = rs.getInt(1);
-                        person.setId(id);
-                    }
+            if (result > 0) {
+                System.out.println("Done");
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    person.setId(id);
                 }
+            }
 
         } catch (Exception e) {
             System.out.println("There was a problem creating the object" + e.getMessage());
             e.printStackTrace();
         }
-        return person ;
+        return person;
     }
 
     @Override
@@ -55,9 +54,9 @@ public class PersonDAOImpl implements People {
         try (
                 Statement createstatement = connection.createStatement();
                 ResultSet rs = createstatement.executeQuery(sql)
-            ){
+        ) {
 
-            while (rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt("person_id");
                 String firstName = rs.getString("first_name");
                 String last_name = rs.getString("last_name");
@@ -72,11 +71,11 @@ public class PersonDAOImpl implements People {
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Couldnt retrieve data" + e.getMessage());
             e.printStackTrace();
         }
-        return personArrayList ;
+        return personArrayList;
 
 
     }
@@ -85,7 +84,28 @@ public class PersonDAOImpl implements People {
     public Person findById(int id) throws SQLException {
 
 
-        return new Person(id, "", "");
+        String sql = "SELECT * from PERSON where person_id = ?";
+        try
+                (PreparedStatement ps = connection.prepareStatement(sql)
+                ) {
+            ps.setInt(1, id);
+            try (
+
+                    ResultSet rs = ps.executeQuery()
+            ) {
+                if (rs.next()) {
+                    int personId = rs.getInt("person_id");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+
+                    return new Person(id, firstName, lastName);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Couldnt find ID" + e.getMessage());
+            e.printStackTrace();
+        }
+        throw new IndexOutOfBoundsException("No such ID exists");
     }
 
     @Override
