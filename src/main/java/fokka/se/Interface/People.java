@@ -12,7 +12,7 @@ public interface People {
     ArrayList<Person> findAll() throws SQLException;
     Person findById(int id) throws SQLException;
     ArrayList<Person> findByName(String person);
-    Person update(Person person);
+    Person update(Person person) throws SQLException;
     boolean deleteById(int id);
 
 

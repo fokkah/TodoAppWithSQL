@@ -16,11 +16,11 @@ public class Main {
             Connection connection = SQLconnection.getConnection();
 
         ){
-        Person person = new Person("test1FirstName", "test1LastName");
+        Person person = new Person(2,"testFor", "updateMethodWithoutRowsAffected");
         PersonDAOImpl newPersonDAO = new PersonDAOImpl(connection);
         //newPersonDAO.create(person1);
-        person.setFirstName("testFor");
-        person.setLastName("update");
+//        person.setFirstName("testFor");
+//        person.setLastName("update");
 
         newPersonDAO.update(person);
             System.out.println("Update done" + person);

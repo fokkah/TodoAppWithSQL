@@ -133,8 +133,8 @@ public class PersonDAOImpl implements People {
 
                     findByNameArrayList.add(new Person(id,firsName,lastName));
 
-                    return findByNameArrayList;
                 }
+                    return findByNameArrayList;
             }
         }catch (SQLException e) {
             System.out.println(e.getMessage());}
@@ -148,8 +148,32 @@ public class PersonDAOImpl implements People {
 
 
     @Override
-    public Person update(Person person) {
-        return null;
+    public Person update(Person person) throws SQLException {
+        String sql = "UPDATE person SET first_name = ?, last_name = ? WHERE person_id = ?";
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            try {
+                ps.setString(1, person.getFirstName());
+                ps.setString(2, person.getLastName());
+                ps.setInt(3, person.getId());
+
+                ps.executeUpdate();
+                //int rowsAffected = ps.executeUpdate();
+                //if (rowsAffected > 0) {
+                //System.out.println("Done" + person);
+                //} else {
+                //  System.out.println("No rows affected" + person.getId());
+                //}
+
+                return person;
+            } catch (SQLException e) {
+                System.out.println("Error updating the person" + e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     @Override
