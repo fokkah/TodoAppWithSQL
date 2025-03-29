@@ -13,7 +13,7 @@ public interface People {
     Person findById(int id) throws SQLException;
     ArrayList<Person> findByName(String person);
     Person update(Person person) throws SQLException;
-    boolean deleteById(int id);
+    boolean deleteById(int id) throws SQLException;
 
 
 }

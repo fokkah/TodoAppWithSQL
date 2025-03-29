@@ -22,8 +22,9 @@ public class Main {
 //        person.setFirstName("testFor");
 //        person.setLastName("update");
 
-        newPersonDAO.update(person);
-            System.out.println("Update done" + person);
+        //newPersonDAO.update(person);
+            //System.out.println("Update done" + person);
+            newPersonDAO.deleteById(4);
         //newPersonDAO.findAll().forEach(System.out::println);
         //System.out.println(newPersonDAO.findById(2));
             // newPersonDAO.findByName("Tamas").forEach(System.out::println);

@@ -118,33 +118,29 @@ public class PersonDAOImpl implements People {
 
         try (
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-        ){
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
             ps.setString(1, person);
             ps.setString(2, person);
-            try(
+            try (
                     ResultSet rs = ps.executeQuery()
-            ){
-                while (rs.next()){
+            ) {
+                while (rs.next()) {
                     int id = rs.getInt("person_id");
                     String firsName = rs.getString("first_name");
                     String lastName = rs.getString("last_name");
                     //if (person.equals(sqlFN) || person.equals(sqlLN)) {}
 
-                    findByNameArrayList.add(new Person(id,firsName,lastName));
+                    findByNameArrayList.add(new Person(id, firsName, lastName));
 
                 }
-                    return findByNameArrayList;
+                return findByNameArrayList;
             }
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());}
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         throw new IndexOutOfBoundsException("No such Name exists");
     }
-
-
-
-
-
 
 
     @Override
@@ -177,7 +173,26 @@ public class PersonDAOImpl implements People {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int id) throws SQLException {
+        String sql = "DELETE FROM person WHERE person_id = ? ";
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            try {
+                ps.setInt(1, id);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    return true;
+                }
+            } catch (SQLException e) {
+                System.out.println("Error deleting the person" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
         return false;
     }
 }
+
