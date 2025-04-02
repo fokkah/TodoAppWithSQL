@@ -30,11 +30,14 @@ public class Main {
         //newPersonDAO.update(person);
             //System.out.println("Update done" + person);
             //newPersonDAO.deleteById(4);
-            //newTodoitem.create(todoItem1);
+            newTodoitem.create(todoItem1);
             //newTodoitem.findAll().forEach(System.out::println);
             //newTodoitem.findById(4);
             //System.out.println(newTodoitem.findById(4));
-            System.out.println(newTodoitem.findByDoneStatus(false));
+            //System.out.println(newTodoitem.findByDoneStatus(false));
+            //System.out.println(newTodoitem.findByAssignee(2));
+            //System.out.println(newTodoitem.findByAssignee(2));
+            //System.out.println(newTodoitem.findByUnassignedTodoItems());
         //newPersonDAO.findAll().forEach(System.out::println);
         //System.out.println(newPersonDAO.findById(2));
             // newPersonDAO.findByName("Tamas").forEach(System.out::println);

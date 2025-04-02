@@ -132,24 +132,108 @@ public class TodoItemImpl implements TodoItems {
                 System.out.println("Couldnt connect to DB" + e.getMessage());
                 e.printStackTrace();
             }
-        throw new SQLException("Couldnt find that Status");
+            throw new SQLException("Couldnt find that Status");
 
         }
     }
 
     @Override
-    public ArrayList<TodoItem> findByAssignee(int id) {
-        return null;
+    public ArrayList<TodoItem> findByAssignee(int id) throws SQLException {
+        ArrayList<TodoItem> assigneeArraylist = new ArrayList<>();
+        String sql = "SELECT * FROM todo_item WHERE assignee_id =?";
+        PersonDAOImpl personDAO = new PersonDAOImpl(connection);
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, id);
+            try (
+                    ResultSet rs = ps.executeQuery();
+            ) {
+                if (rs.next()) {
+
+                int todo_id = rs.getInt("todo_id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                LocalDate deadline = rs.getDate("deadline").toLocalDate();
+                boolean done = rs.getBoolean("done");
+                Person assignee = personDAO.findById(rs.getInt("assignee_id"));
+
+                assigneeArraylist.add(new TodoItem(todo_id, title, description, deadline, done, assignee));
+                return assigneeArraylist;
+                }
+            } catch (SQLException e) {
+                System.out.println("Couldnt connect to DB" + e.getMessage());
+                e.printStackTrace();
+
+            }
+            throw new RuntimeException ("Couldnt find that asignee");
+        }
     }
 
     @Override
     public ArrayList<TodoItem> findByAssignee(Person person) {
-        return null;
+        ArrayList<TodoItem> assigneeArraylistPerson = new ArrayList<>();
+        String sql = "SELECT * FROM todo_item WHERE assignee_id =?";
+        PersonDAOImpl personDAO = new PersonDAOImpl(connection);
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, person.getId() );
+            try (
+                    ResultSet rs = ps.executeQuery();
+            ) {
+                if (rs.next()) {
+
+                    int todo_id = rs.getInt("todo_id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    LocalDate deadline = rs.getDate("deadline").toLocalDate();
+                    boolean done = rs.getBoolean("done");
+                    Person assignee = personDAO.findById(rs.getInt("assignee_id"));
+
+                    assigneeArraylistPerson.add(new TodoItem(todo_id, title, description, deadline, done, assignee));
+                }
+            } catch (SQLException e) {
+                System.out.println("Couldnt connect to DB" + e.getMessage());
+                e.printStackTrace();
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException ("Couldnt find that asignee");
+
+        }
+        return assigneeArraylistPerson;
     }
 
     @Override
-    public ArrayList<TodoItem> findByUnassignedTodoItems() {
-        return null;
+    public ArrayList<TodoItem> findByUnassignedTodoItems() throws SQLException {
+        ArrayList<TodoItem> unassignedTodoArrayList = new ArrayList<>();
+        String sql = "SELECT * FROM todo_item WHERE assigned_id =?";
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)
+                ){
+            ps.setInt(1, 0);
+            try (
+                ResultSet rs = ps.executeQuery();
+                ){
+                if (rs.next()) {
+                    int todo_id = rs.getInt("todo_id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    LocalDate deadline = rs.getDate("deadline").toLocalDate();
+                    boolean done = rs.getBoolean("done");
+
+                    unassignedTodoArrayList.add(new TodoItem(todo_id, title, description, deadline, done, null));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return unassignedTodoArrayList;
+                }
+
     }
 
     @Override
