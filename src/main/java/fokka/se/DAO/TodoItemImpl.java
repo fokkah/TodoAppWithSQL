@@ -5,10 +5,7 @@ import fokka.se.Todo.Person;
 import fokka.se.Todo.TodoItem;
 import jdk.swing.interop.SwingInterOpUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -136,7 +133,7 @@ public class TodoItemImpl implements TodoItems {
                 System.out.println("Couldnt connect to DB" + e.getMessage());
                 e.printStackTrace();
             }
-            throw new SQLException("Couldnt find that Status");
+            throw new SQLException("No object is set as Done!");
 
         }
     }
@@ -171,7 +168,8 @@ public class TodoItemImpl implements TodoItems {
                 e.printStackTrace();
 
             }
-            throw new RuntimeException("Couldnt find that asignee");
+            throw new RuntimeException("That assignee doesnt have any object bound to it!");
+
         }
     }
 
@@ -204,9 +202,9 @@ public class TodoItemImpl implements TodoItems {
                 e.printStackTrace();
 
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Couldnt find that asignee");
 
+        } catch (SQLException e) {
+            throw new IndexOutOfBoundsException("No person assigned to this object" + e.getMessage());
         }
         return assigneeArraylistPerson;
     }
@@ -214,7 +212,7 @@ public class TodoItemImpl implements TodoItems {
     @Override
     public ArrayList<TodoItem> findByUnassignedTodoItems() throws SQLException {
         ArrayList<TodoItem> unassignedTodoArrayList = new ArrayList<>();
-        String sql = "SELECT * FROM todo_item WHERE assigned_id =?";
+        String sql = "SELECT * FROM todo_item WHERE assignee_id =?";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(sql)

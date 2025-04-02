@@ -23,16 +23,36 @@ public class Main {
             PersonDAOImpl personDAOImpl = new PersonDAOImpl(connection);
             TodoItemImpl todoItemImpl = new TodoItemImpl(connection);
 
-            // lägg till personer till DB
-            personDAOImpl.create(new Person("Tamas", "Szalai"));
 
-            Person person1 = new Person("Tamas");
 
-            // lägg till items till DB
+//            Person person1 = new Person("Tamas");
 
-            TodoItem todoItem = new TodoItem("title", "desc", person1, LocalDate.now().plusDays(12));
+//
+//            personDAOImpl.create(person1);
+//            System.out.println(personDAOImpl.findAll());
+//            System.out.println(personDAOImpl.findById(10));
+//            System.out.println(personDAOImpl.findByName("Tamas"));
+//            System.out.println(personDAOImpl.update(person1));
+//            System.out.println(personDAOImpl.deleteById(12));
 
-            // testa metoder för item och person.
+
+
+
+
+
+
+//            TodoItem todoItem1 = new TodoItem("titleTestForReview", "descTestForReview", person1, LocalDate.now().plusDays(3));
+//            TodoItem todoItem = new TodoItem("title", "desc", person1, LocalDate.now().plusDays(12));
+//            System.out.println(todoItemImpl.create(new TodoItem("titleTestForReview", "descTestForReview", person1, LocalDate.now().plusDays(3))));
+//            System.out.println(todoItemImpl.create(new TodoItem("titleForReview", "descForReview", personDAOImpl.findById(11), LocalDate.now())));
+//            System.out.println(todoItemImpl.findAll());
+//            System.out.println(todoItemImpl.findById(11));
+//            System.out.println(todoItemImpl.findByDoneStatus(true));
+//            System.out.println(todoItemImpl.findByAssignee(10));
+//            System.out.println(todoItemImpl.findByAssignee(personDAOImpl.findById(11)));
+//            System.out.println(todoItemImpl.findByUnassignedTodoItems());
+
+
 
 
 
